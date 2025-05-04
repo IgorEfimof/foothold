@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогнозы на матч</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Прогнозы на футбольный матч</h1>
+    
+    <label for="team1">Команда 1:</label>
+    <input type="text" id="team1" placeholder="Введите название команды 1">
+    
+    <label for="team2">Команда 2:</label>
+    <input type="text" id="team2" placeholder="Введите название команды 2">
+    
+    <label for="odds1">Коэффициент для победы Команды 1:</label>
+    <input type="number" id="odds1" step="0.01" placeholder="Введите коэффициент для команды 1">
+    
+    <label for="odds2">Коэффициент для победы Команды 2:</label>
+    <input type="number" id="odds2" step="0.01" placeholder="Введите коэффициент для команды 2">
+    
+    <label for="totalOver">Тотал больше:</label>
+    <input type="number" id="totalOver" step="0.01" placeholder="Коэффициент для тотала больше">
+    
+    <label for="totalUnder">Тотал меньше:</label>
+    <input type="number" id="totalUnder" step="0.01" placeholder="Коэффициент для тотала меньше">
+    
+    <button onclick="calculatePrediction()">Получить прогноз</button>
+    
+    <div class="result" id="result">
+        <!-- Здесь будут отображаться прогнозы -->
+    </div>
+</div>
+
+<script>
+    function calculatePrediction() {
+        // Получаем значения из формы
+        const team1 = document.getElementById("team1").value;
+        const team2 = document.getElementById("team2").value;
+        const odds1 = parseFloat(document.getElementById("odds1").value);
+        const odds2 = parseFloat(document.getElementById("odds2").value);
+        const totalOver = parseFloat(document.getElementById("totalOver").value);
+        const totalUnder = parseFloat(document.getElementById("totalUnder").value);
+
+        // Проверка на заполненность всех полей
+        if (!team1 || !team2 || isNaN(odds1) || isNaN(odds2) || isNaN(totalOver) || isNaN(totalUnder)) {
+            document.getElementById("result").innerHTML = "<p>Пожалуйста, заполните все поля.</p>";
+            return;
+        }
+
+        // Простой расчет на основе коэффициентов и тоталов
+        const prediction = (odds1 + odds2) / 2;
+        let resultText = `<p>Прогноз для матча ${team1} vs ${team2}</p>`;
+
+        if (odds1 < odds2) {
+            resultText += `<p><strong>Победа ${team1} более вероятна. (Коэффициент: ${odds1})</strong></p>`;
+        } else if (odds1 > odds2) {
+            resultText += `<p><strong>Победа ${team2} более вероятна. (Коэффициент: ${odds2})</strong></p>`;
+        } else {
+            resultText += `<p><strong>Матч будет равным. Ожидается ничья.</strong></p>`;
+        }
+
+        // Анализ тотала
+        if (totalOver < totalUnder) {
+            resultText += `<p>Прогноз: <strong>Меньше тотала.</strong> (Коэффициент для тотала меньше: ${totalUnder})</p>`;
+        } else if (totalOver > totalUnder) {
+            resultText += `<p>Прогноз: <strong>Больше тотала.</strong> (Коэффициент для тотала больше: ${totalOver})</p>`;
+        } else {
+            resultText += `<p>Прогноз: <strong>Тотал в пределах.</strong></p>`;
+        }
+
+        // Отображаем результат
+        document.getElementById("result").innerHTML = resultText;
+    }
+</script>
+
+</body>
+</html>
 
